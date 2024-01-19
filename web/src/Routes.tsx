@@ -12,6 +12,7 @@ import { Set, Router, Route, PrivateSet } from '@redwoodjs/router'
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 
 import { useAuth } from './auth'
+import MainLayout from './layouts/MainLayout/MainLayout'
 
 const Routes = () => {
   return (
@@ -24,7 +25,9 @@ const Routes = () => {
           <Route path="/items" page={ItemItemsPage} name="items" />
         </Set>
       </PrivateSet>
-      <Route path="/" page={HomePage} name="home" />
+      <Set wrap={MainLayout}>
+        <Route path="/" page={HomePage} name="home" />
+      </Set>
       <Route notfound page={NotFoundPage} />
     </Router>
   )
