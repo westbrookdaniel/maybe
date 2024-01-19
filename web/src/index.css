@@ -30,3 +30,13 @@
 * {
   font-family: 'Satoshi', sans-serif;
 }
+
+.button {
+  background-color: #eee;
+  padding: 0.25rem 1rem;
+
+  &:active {
+    background-color: #ddd;
+  }
+}
+
