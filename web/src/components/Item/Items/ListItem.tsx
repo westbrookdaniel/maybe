@@ -50,14 +50,11 @@ function NoteItem({ item }: Props) {
       rel="noopener noreferrer"
     >
       <Container>
-        <div className="flex justify-between">
-          <div className="flex flex-col space-y-4">
-            <p>{item.title}</p>
-            {!!item.description && (
-              <p className="text-pretty">{truncate(item.description)}</p>
-            )}
-          </div>
-          <Pin width={32} />
+        <div className="flex flex-col space-y-4">
+          <p>{item.title}</p>
+          {!!item.description && (
+            <p className="text-pretty">{truncate(item.description)}</p>
+          )}
         </div>
       </Container>
     </Link>
