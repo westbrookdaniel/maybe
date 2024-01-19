@@ -27,16 +27,22 @@
   font-display: block;
 }
 
-* {
-  font-family: 'Satoshi', sans-serif;
-}
-
-.button {
-  background-color: #eee;
-  padding: 0.25rem 1rem;
-
-  &:active {
-    background-color: #ddd;
+@layer base {
+  html {
+    font-family: 'Satoshi', sans-serif;
+  }
+  a {
+    @apply focus:ring-2 focus:ring-black focus:outline-none;
   }
 }
 
+@layer components {
+  .button {
+    @apply bg-gray-100 px-1 py-0.5;
+    @apply active:bg-gray-200;
+  }
+
+  .checkbox {
+    @apply border-2 border-gray-400 text-black focus:ring-black
+  }
+}

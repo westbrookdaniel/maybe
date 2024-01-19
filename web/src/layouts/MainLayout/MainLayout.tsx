@@ -1,4 +1,4 @@
-import { Link, routes } from '@redwoodjs/router'
+import { NavLink, routes } from '@redwoodjs/router'
 
 type MainLayoutProps = {
   children?: React.ReactNode
@@ -10,9 +10,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <header className="flex p-8">
         <div className="flex-1" />
         <nav className="flex flex-1 justify-center space-x-8">
-          <Link to={routes.home()}>Keep</Link>
-          <Link to={routes.home()}>Maybe</Link>
-          <Link to={routes.home()}>Profile</Link>
+          <NavLink className="text-gray-400" activeClassName="text-black" to={routes.items()}>Keep</NavLink>
+          <NavLink className="text-gray-400" activeClassName="text-black" to={routes.home()}>Maybe</NavLink>
+          <NavLink className="text-gray-400" activeClassName="text-black" to={routes.items()}>Profile</NavLink>
         </nav>
         <div className="flex flex-1 justify-end">
           {/* <input type="text" placeholder="Search..." /> */}

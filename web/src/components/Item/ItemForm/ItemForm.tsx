@@ -140,7 +140,7 @@ const ItemForm = (props: ItemFormProps) => {
         <CheckboxField
           name="completed"
           defaultChecked={props.item?.completed}
-          className="rw-input"
+          className="checkbox"
           errorClassName="rw-input rw-input-error"
         />
 
@@ -159,7 +159,6 @@ const ItemForm = (props: ItemFormProps) => {
           defaultValue={props.item?.link}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
         />
 
         <FieldError name="link" className="rw-field-error" />
