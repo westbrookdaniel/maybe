@@ -10,3 +10,14 @@ export function validateType(type: string) {
       throw new Error(`Invalid type: ${type}`)
   }
 }
+
+export function validateCategory(category: string) {
+  switch (category) {
+    case 'maybe':
+    case 'keep':
+    case 'discard':
+      return
+    default:
+      throw new Error(`Invalid category: ${category}`)
+  }
+}

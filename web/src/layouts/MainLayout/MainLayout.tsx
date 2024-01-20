@@ -11,25 +11,25 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <div className="flex-1" />
         <nav className="flex flex-1 justify-center space-x-6">
           <NavLink
-            className="rounded-lg p-1 text-gray-400"
+            className="rounded-lg p-1 text-gray-400 w-20 text-center"
             activeClassName="!text-black"
             to={routes.items()}
           >
             Keep
           </NavLink>
           <NavLink
-            className="rounded-lg p-1 text-gray-400"
+            className="rounded-lg p-1 text-gray-400 w-20 text-center"
             activeClassName="!text-black"
             to={routes.home()}
           >
             Maybe
           </NavLink>
           <NavLink
-            className="rounded-lg p-1 text-gray-400"
+            className="rounded-lg p-1 text-gray-400 w-20 text-center"
             activeClassName="!text-black"
             to={routes.items()}
           >
-            Profile
+            Discard
           </NavLink>
         </nav>
         <div className="flex flex-1 justify-end">

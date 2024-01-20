@@ -30,4 +30,10 @@ model Item {
 
   // Auth0 sub
   userId    String
+
+  // Category
+  category  String      @default("maybe")
+  // Date for returning to Category
+  returnDate DateTime?
+  returnTo   String?
 }

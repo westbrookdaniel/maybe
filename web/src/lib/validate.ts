@@ -12,3 +12,18 @@ export function friendlyType(type: string) {
       return 'Unknown'
   }
 }
+
+export const categories = ['maybe', 'keep', 'discard']
+
+export function friendlyCategory(category: string) {
+  switch (category) {
+    case 'maybe':
+      return 'Maybe'
+    case 'keep':
+      return 'Keep'
+    case 'discard':
+      return 'Discard'
+    default:
+      return 'Unknown'
+  }
+}

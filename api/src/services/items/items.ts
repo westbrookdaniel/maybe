@@ -1,7 +1,7 @@
 import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
-import { validateType } from 'src/lib/validate'
+import { validateCategory, validateType } from 'src/lib/validate'
 
 export const items: QueryResolvers['items'] = () => {
   return db.item.findMany()
@@ -15,6 +15,7 @@ export const item: QueryResolvers['item'] = ({ id }) => {
 
 export const createItem: MutationResolvers['createItem'] = ({ input }) => {
   validateType(input.type)
+  validateCategory(input.category)
   return db.item.create({
     data: input,
   })

@@ -10,6 +10,9 @@ export const schema = gql`
     completed: Boolean!
     link: String
     userId: String!
+    category: String!
+    returnDate: DateTime
+    returnTo: String
   }
 
   type Query {
@@ -25,6 +28,9 @@ export const schema = gql`
     completed: Boolean
     link: String
     userId: String!
+    category: String
+    returnDate: DateTime
+    returnTo: String
   }
 
   input UpdateItemInput {
@@ -35,6 +41,9 @@ export const schema = gql`
     completed: Boolean
     link: String
     userId: String
+    category: String
+    returnDate: DateTime
+    returnTo: String
   }
 
   type Mutation {
