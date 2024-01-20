@@ -1,8 +1,11 @@
-import { relativeTimeTag, truncate } from 'src/lib/formatters'
+import { relativeTimeTag } from 'src/lib/formatters'
 import { FindItems } from 'types/graphql'
 import { Link as LinkIcon } from 'iconoir-react'
 import { Link, routes } from '@redwoodjs/router'
 import Checkbox from 'src/components/Form/Checkbox'
+import { motion } from 'framer-motion'
+
+const MotionLink = motion(Link)
 
 interface Props {
   item: FindItems['items'][number]
@@ -27,11 +30,14 @@ function Container({ children }: { children: React.ReactNode }) {
 
 function LinkItem({ item }: Props) {
   return (
-    <a
+    <motion.a
       href={item.link}
       target="_blank"
       rel="noopener noreferrer"
       className="rounded-2xl"
+      whileHover={{ scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
     >
       <Container>
         <div className="flex justify-between">
@@ -44,13 +50,19 @@ function LinkItem({ item }: Props) {
           <LinkIcon width={24} />
         </div>
       </Container>
-    </a>
+    </motion.a>
   )
 }
 
 function NoteItem({ item }: Props) {
   return (
-    <Link to={routes.item({ id: item.id })} className="rounded-2xl">
+    <MotionLink
+      to={routes.item({ id: item.id })}
+      className="rounded-2xl"
+      whileHover={{ scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+    >
       <Container>
         <div className="flex flex-col space-y-4">
           <p>{item.title}</p>
@@ -59,7 +71,7 @@ function NoteItem({ item }: Props) {
           )}
         </div>
       </Container>
-    </Link>
+    </MotionLink>
   )
 }
 

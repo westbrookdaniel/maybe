@@ -63,7 +63,7 @@ function CheckboxIndicator() {
   const { id, isChecked, setIsChecked } = useContext(CheckboxContext)
 
   return (
-    <div className="relative flex items-center outline-none">
+    <div className="relative flex items-center outline-none mt-[3px]">
       <input
         type="checkbox"
         className="peer absolute opacity-0"
@@ -111,7 +111,7 @@ function CheckboxLabel({ children }: CheckboxLabelProps) {
 
   return (
     <motion.label
-      className="relative ml-2 cursor-pointer overflow-hidden text-sm"
+      className="relative ml-2 cursor-pointer overflow-hidden"
       htmlFor={id}
       animate={{
         color: isChecked
