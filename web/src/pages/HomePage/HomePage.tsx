@@ -10,10 +10,10 @@ const HomePage = () => {
         <p className="mt-32 text-center">Login to see your items</p>
         <div className="mt-8 flex flex-col space-y-2">
           <button className="button" onClick={() => logIn()}>
-            log in
+            Log In
           </button>
           <button className="button" onClick={() => signUp()}>
-            sign up
+            Sign Up
           </button>
         </div>
       </>

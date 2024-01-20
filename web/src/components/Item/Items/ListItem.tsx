@@ -1,7 +1,8 @@
-import { relativeTimeTag, timeTag, truncate } from 'src/lib/formatters'
+import { relativeTimeTag, truncate } from 'src/lib/formatters'
 import { FindItems } from 'types/graphql'
-import { Link as LinkIcon, Pin } from 'iconoir-react'
+import { Link as LinkIcon } from 'iconoir-react'
 import { Link, routes } from '@redwoodjs/router'
+import Checkbox from 'src/components/Form/Checkbox'
 
 interface Props {
   item: FindItems['items'][number]
@@ -21,18 +22,23 @@ export function ListItem({ item }: Props) {
 }
 
 function Container({ children }: { children: React.ReactNode }) {
-  return <div className="bg-gray-100 p-6">{children}</div>
+  return <div className="rounded-2xl bg-white p-6">{children}</div>
 }
 
 function LinkItem({ item }: Props) {
   return (
-    <a href={item.link} target="_blank" rel="noopener noreferrer">
+    <a
+      href={item.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="rounded-2xl"
+    >
       <Container>
         <div className="flex justify-between">
           <div className="flex flex-col space-y-4">
-            <p className="underline decoration-gray-400">{item.title}</p>
+            <p className="underline decoration-gray-300">{item.title}</p>
             {!!item.description && (
-              <p className="text-pretty">{truncate(item.description)}</p>
+              <p className="text-pretty">{item.description}</p>
             )}
           </div>
           <LinkIcon width={24} />
@@ -44,16 +50,12 @@ function LinkItem({ item }: Props) {
 
 function NoteItem({ item }: Props) {
   return (
-    <Link
-      to={routes.item({ id: item.id })}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <Link to={routes.item({ id: item.id })} className="rounded-2xl">
       <Container>
         <div className="flex flex-col space-y-4">
           <p>{item.title}</p>
           {!!item.description && (
-            <p className="text-pretty">{truncate(item.description)}</p>
+            <p className="text-pretty">{item.description}</p>
           )}
         </div>
       </Container>
@@ -62,34 +64,32 @@ function NoteItem({ item }: Props) {
 }
 
 function TodoItem({ item }: Props) {
+  const [c, onC] = React.useState(item.completed)
   return (
     <div className="px-6 py-2">
-      <div className="flex items-start gap-4">
-        <input
-          type="checkbox"
-          checked={item.completed}
-          className="checkbox mt-1"
-          onClick={(e) => e.stopPropagation()}
-        />
-        <div className="flex flex-col space-y-2">
-          <p>{item.title}</p>
-          {!!item.description && (
-            <p className="text-pretty">{truncate(item.description)}</p>
-          )}
-          {!!item.dueDate && (
-            <p
-              className={
-                'text-gray-400' +
-                (new Date(item.dueDate).getTime() < new Date().getTime()
-                  ? ' text-red-500'
-                  : '')
-              }
-            >
-              {relativeTimeTag(item.dueDate)}
-            </p>
-          )}
-        </div>
-      </div>
+      <Checkbox checked={c} onChange={onC}>
+        <Checkbox.Indicator />
+        <Checkbox.Label>
+          <div className="flex flex-col space-y-2">
+            <p>{item.title}</p>
+            {!!item.description && (
+              <p className="text-pretty">{item.description}</p>
+            )}
+            {!!item.dueDate && (
+              <p
+                className={
+                  'text-gray-400' +
+                  (new Date(item.dueDate).getTime() < new Date().getTime() && !c
+                    ? ' text-red-500'
+                    : '')
+                }
+              >
+                {relativeTimeTag(item.dueDate)}
+              </p>
+            )}
+          </div>
+        </Checkbox.Label>
+      </Checkbox>
     </div>
   )
 }
@@ -118,14 +118,3 @@ function TodoItem({ item }: Props) {
 //     Delete
 //   </button>
 // </nav>
-//
-// <td>{truncate(item.id)}</td>
-// <td>{truncate(item.title)}</td>
-// <td>{truncate(item.description)}</td>
-// <td>{truncate(item.type)}</td>
-// <td>{timeTag(item.dueDate)}</td>
-// <td>{timeTag(item.createdAt)}</td>
-// <td>{timeTag(item.updatedAt)}</td>
-// <td>{checkboxInputTag(item.completed)}</td>
-// <td>{truncate(item.link)}</td>
-// <td>{truncate(item.userId)}</td>

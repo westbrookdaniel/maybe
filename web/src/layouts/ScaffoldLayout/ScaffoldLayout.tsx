@@ -1,5 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
+import { useAuth } from 'src/auth'
 
 type LayoutProps = {
   title: string
@@ -16,6 +17,7 @@ const ScaffoldLayout = ({
   buttonTo,
   children,
 }: LayoutProps) => {
+  const { logOut } = useAuth()
   return (
     <div className="rw-scaffold">
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
@@ -25,6 +27,19 @@ const ScaffoldLayout = ({
             {title}
           </Link>
         </h1>
+        <button
+          onClick={() =>
+            logOut({
+              onRedirect: async (url) => {
+                window.location.replace(url)
+              },
+            })
+          }
+          className="rw-button"
+        >
+          Log Out
+        </button>
+
         <Link to={routes[buttonTo]()} className="rw-button rw-button-green">
           <div className="rw-button-icon">+</div> {buttonLabel}
         </Link>
