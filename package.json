@@ -26,6 +26,7 @@
   "dependencies": {
     "@tailwindcss/forms": "^0.5.7",
     "framer-motion": "^10.18.0",
-    "iconoir-react": "^7.3.0"
+    "iconoir-react": "^7.3.0",
+    "vaul": "^0.8.0"
   }
 }

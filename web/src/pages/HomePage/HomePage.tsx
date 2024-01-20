@@ -1,5 +1,6 @@
 import { useAuth } from 'src/auth'
 import ItemsCell from 'src/components/Item/ItemsCell'
+import NewItemButton from 'src/components/Item/NewItemButton/NewItemButton'
 
 const HomePage = () => {
   const { isAuthenticated, signUp, logIn, loading } = useAuth()
@@ -25,6 +26,7 @@ const HomePage = () => {
   return (
     <>
       <ItemsCell />
+      <NewItemButton />
     </>
   )
 }

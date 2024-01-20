@@ -42,6 +42,10 @@
     @apply active:bg-gray-200;
   }
 
+  .button-primary {
+    @apply rounded-lg bg-black text-white px-4 py-2;
+  }
+
   .checkbox {
     @apply border-2 border-gray-400 text-black focus:ring-black;
   }
