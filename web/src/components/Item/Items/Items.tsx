@@ -1,20 +1,13 @@
-import { Link, routes } from '@redwoodjs/router'
-import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
-
-import { QUERY } from 'src/components/Item/ItemsCell'
-import { checkboxInputTag, timeTag, truncate } from 'src/lib/formatters'
-
-import type { DeleteItemMutationVariables, FindItems } from 'types/graphql'
+import type { FindItems } from 'types/graphql'
 import { ListItem } from './ListItem'
 
-const DELETE_ITEM_MUTATION = gql`
-  mutation DeleteItemMutation($id: Int!) {
-    deleteItem(id: $id) {
-      id
-    }
-  }
-`
+// const DELETE_ITEM_MUTATION = gql`
+//   mutation DeleteItemMutation($id: Int!) {
+//     deleteItem(id: $id) {
+//       id
+//     }
+//   }
+// `
 
 const ItemsList = ({ items }: FindItems) => {
   // const [deleteItem] = useMutation(DELETE_ITEM_MUTATION, {
@@ -36,11 +29,10 @@ const ItemsList = ({ items }: FindItems) => {
   //     deleteItem({ variables: { id } })
   //   }
   // }
-
   return (
-    <div className="w-full space-y-4 flex flex-col px-4">
-      {items.map((item) => (
-        <ListItem key={item.id} item={item} />
+    <div className="flex w-full flex-col space-y-4 px-4">
+      {items.map((item, i) => (
+        <ListItem key={item.id} item={item} index={i} />
       ))}
     </div>
   )

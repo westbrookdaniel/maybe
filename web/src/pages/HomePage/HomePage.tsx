@@ -2,7 +2,9 @@ import { useAuth } from 'src/auth'
 import ItemsCell from 'src/components/Item/ItemsCell'
 
 const HomePage = () => {
-  const { isAuthenticated, signUp, logIn, logOut } = useAuth()
+  const { isAuthenticated, signUp, logIn, loading } = useAuth()
+
+  if (loading) return null
 
   if (!isAuthenticated) {
     return (

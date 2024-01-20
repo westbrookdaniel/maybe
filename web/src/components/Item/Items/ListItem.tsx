@@ -7,20 +7,45 @@ import { motion } from 'framer-motion'
 
 const MotionLink = motion(Link)
 
-interface Props {
-  item: FindItems['items'][number]
+const itemVariants = {
+  visible: (i: number) => ({
+    opacity: 1,
+    scale: 1,
+    translateY: 0,
+    transition: {
+      delay: i * 0.05,
+    },
+  }),
+  hidden: {
+    opacity: 0,
+    scale: 0.98,
+    translateY: 20,
+  },
 }
 
-export function ListItem({ item }: Props) {
-  switch (item.type) {
+const fadeInProps = (i: number) => ({
+  custom: i,
+  initial: 'hidden',
+  animate: 'visible',
+  variants: itemVariants,
+  transition: { type: 'spring', stiffness: 400, damping: 17 },
+})
+
+interface Props {
+  item: FindItems['items'][number]
+  index: number
+}
+
+export function ListItem(props: Props) {
+  switch (props.item.type) {
     case 'link':
-      return <LinkItem item={item} />
+      return <LinkItem {...props} />
     case 'note':
-      return <NoteItem item={item} />
+      return <NoteItem {...props} />
     case 'todo':
-      return <TodoItem item={item} />
+      return <TodoItem {...props} />
     default:
-      throw new Error(`Unknown item type: ${item.type}`)
+      throw new Error(`Unknown item type: ${props.item.type}`)
   }
 }
 
@@ -28,7 +53,7 @@ function Container({ children }: { children: React.ReactNode }) {
   return <div className="rounded-2xl bg-white p-6">{children}</div>
 }
 
-function LinkItem({ item }: Props) {
+function LinkItem({ item, index }: Props) {
   return (
     <motion.a
       href={item.link}
@@ -37,7 +62,7 @@ function LinkItem({ item }: Props) {
       className="rounded-2xl"
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+      {...fadeInProps(index)}
     >
       <Container>
         <div className="flex justify-between">
@@ -54,14 +79,14 @@ function LinkItem({ item }: Props) {
   )
 }
 
-function NoteItem({ item }: Props) {
+function NoteItem({ item, index }: Props) {
   return (
     <MotionLink
       to={routes.item({ id: item.id })}
       className="rounded-2xl"
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+      {...fadeInProps(index)}
     >
       <Container>
         <div className="flex flex-col space-y-4">
@@ -75,10 +100,10 @@ function NoteItem({ item }: Props) {
   )
 }
 
-function TodoItem({ item }: Props) {
+function TodoItem({ item, index }: Props) {
   const [c, onC] = React.useState(item.completed)
   return (
-    <div className="px-6 py-2">
+    <motion.div className="px-6 py-2" {...fadeInProps(index)}>
       <Checkbox checked={c} onChange={onC}>
         <Checkbox.Indicator />
         <Checkbox.Label>
@@ -102,7 +127,7 @@ function TodoItem({ item }: Props) {
           </div>
         </Checkbox.Label>
       </Checkbox>
-    </div>
+    </motion.div>
   )
 }
 
