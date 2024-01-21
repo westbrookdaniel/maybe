@@ -63,13 +63,8 @@ const NewItemButton = () => {
         </motion.button>
       }
       content={
-        <div className="rw-segment">
-          <header className="rw-segment-header">
-            <h2 className="rw-heading rw-heading-secondary">New Item</h2>
-          </header>
-          <div className="rw-segment-main">
-            <ItemForm onSave={onSave} loading={loading} error={error} />
-          </div>
+        <div className="pt-4">
+          <ItemForm onSave={onSave} loading={loading} error={error} />
         </div>
       }
     />

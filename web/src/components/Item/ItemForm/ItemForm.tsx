@@ -15,7 +15,7 @@ import type { RWGqlError } from '@redwoodjs/forms'
 import { useAuth } from 'src/auth'
 import { friendlyType, types } from 'src/lib/validate'
 
-const formatDatetime = (value) => {
+const formatDatetime = (value: string) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
   }
