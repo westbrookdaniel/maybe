@@ -19,7 +19,7 @@ const tickVariants = {
     opacity: 1,
     transition: {
       duration: 0.2,
-      delay: 0.2,
+      delay: 0,
     },
   },
   unchecked: {
@@ -119,7 +119,7 @@ function CheckboxLabel({ children }: CheckboxLabelProps) {
       }}
       initial={false}
       transition={{
-        duration: 0.3,
+        duration: 0.2,
         ease: 'easeOut',
       }}
     >

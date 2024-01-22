@@ -11,7 +11,10 @@ export function validateType(type: string) {
   }
 }
 
-export function validateCategory(category: string) {
+export function validateCategory(category?: string) {
+  // db has a default value of 'maybe'
+  if (!category) return
+
   switch (category) {
     case 'maybe':
     case 'keep':

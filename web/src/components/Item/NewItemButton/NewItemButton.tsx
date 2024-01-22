@@ -3,7 +3,9 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { motion } from 'framer-motion'
 import { Plus } from 'iconoir-react'
+import { useState } from 'react'
 import Drawer from 'src/components/Drawer/Drawer'
+import { QUERY as ItemsQuery } from 'src/components/Item/ItemsCell'
 
 import ItemForm from 'src/components/Item/ItemForm'
 
@@ -38,14 +40,17 @@ const fadeInProps = {
 }
 
 const NewItemButton = () => {
+  const [open, setOpen] = useState(false)
+
   const [createItem, { loading, error }] = useMutation(CREATE_ITEM_MUTATION, {
     onCompleted: () => {
       toast.success('Item created')
-      navigate(routes.items())
+      setOpen(false)
     },
     onError: (error) => {
       toast.error(error.message)
     },
+    refetchQueries: [{ query: ItemsQuery }],
   })
 
   const onSave = (input: CreateItemInput) => {
@@ -54,6 +59,8 @@ const NewItemButton = () => {
 
   return (
     <Drawer
+      open={open}
+      onOpenChange={setOpen}
       trigger={
         <motion.button
           className="button-primary fixed bottom-12 left-[calc(50vw-18px)] rounded-full p-2"

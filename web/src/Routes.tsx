@@ -19,7 +19,6 @@ const Routes = () => {
     <Router useAuth={useAuth}>
       <PrivateSet unauthenticated="home">
         <Set wrap={ScaffoldLayout} title="Items" titleTo="items" buttonLabel="New Item" buttonTo="newItem">
-          <Route path="/items/new" page={ItemNewItemPage} name="newItem" />
           <Route path="/items/{id:Int}/edit" page={ItemEditItemPage} name="editItem" />
           <Route path="/items/{id:Int}" page={ItemItemPage} name="item" />
           <Route path="/items" page={ItemItemsPage} name="items" />

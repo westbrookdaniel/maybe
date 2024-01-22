@@ -3,11 +3,17 @@ import { Drawer as VaulDrawer } from 'vaul'
 interface Props {
   trigger: React.ReactNode
   content: React.ReactNode
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
-function Drawer({ trigger, content }: Props) {
+function Drawer({ trigger, content, open, onOpenChange }: Props) {
   return (
-    <VaulDrawer.Root shouldScaleBackground>
+    <VaulDrawer.Root
+      shouldScaleBackground
+      onOpenChange={onOpenChange}
+      open={open}
+    >
       <VaulDrawer.Trigger asChild>{trigger}</VaulDrawer.Trigger>
       <VaulDrawer.Portal>
         <VaulDrawer.Overlay className="fixed inset-0 bg-black/40" />
