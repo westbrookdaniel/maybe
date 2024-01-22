@@ -44,7 +44,7 @@ const NewItemButton = () => {
 
   const [createItem, { loading, error }] = useMutation(CREATE_ITEM_MUTATION, {
     onCompleted: () => {
-      toast.success('Item created')
+      toast.success('Created')
       setOpen(false)
     },
     onError: (error) => {

@@ -1,9 +1,27 @@
 import { relativeTimeTag } from 'src/lib/formatters'
-import { FindItems } from 'types/graphql'
-import { Link as LinkIcon } from 'iconoir-react'
+import { DeleteItemMutationVariables, FindItems } from 'types/graphql'
+import { Link as LinkIcon, MoreVert } from 'iconoir-react'
 import { Link, routes } from '@redwoodjs/router'
 import Checkbox from 'src/components/Form/Checkbox'
 import { motion } from 'framer-motion'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from 'src/components/Dropdown/Dropdown'
+import { useState } from 'react'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/dist/toast'
+import { QUERY as ItemsQuery } from 'src/components/Item/ItemsCell'
+
+const DELETE_ITEM_MUTATION = gql`
+  mutation DeleteItemMutation($id: Int!) {
+    deleteItem(id: $id) {
+      id
+    }
+  }
+`
 
 const MotionLink = motion(Link)
 
@@ -37,16 +55,22 @@ interface Props {
 }
 
 export function ListItem(props: Props) {
+  let comp: React.ReactNode
   switch (props.item.type) {
     case 'link':
-      return <LinkItem {...props} />
+      comp = <LinkItem {...props} />
+      break
     case 'note':
-      return <NoteItem {...props} />
+      comp = <NoteItem {...props} />
+      break
     case 'todo':
-      return <TodoItem {...props} />
+      comp = <TodoItem {...props} />
+      break
     default:
       throw new Error(`Unknown item type: ${props.item.type}`)
   }
+
+  return <Wrapper item={props.item}>{comp}</Wrapper>
 }
 
 function Container({ children }: { children: React.ReactNode }) {
@@ -60,8 +84,6 @@ function LinkItem({ item, index }: Props) {
       target="_blank"
       rel="noopener noreferrer"
       className="rounded-2xl"
-      whileHover={{ scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
       {...fadeInProps(index)}
     >
       <Container>
@@ -84,8 +106,6 @@ function NoteItem({ item, index }: Props) {
     <MotionLink
       to={routes.item({ id: item.id })}
       className="rounded-2xl"
-      whileHover={{ scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
       {...fadeInProps(index)}
     >
       <Container>
@@ -131,27 +151,80 @@ function TodoItem({ item, index }: Props) {
   )
 }
 
-// <nav className="rw-table-actions">
-//   <Link
-//     to={routes.item({ id: item.id })}
-//     title={'Show item ' + item.id + ' detail'}
-//     className="rw-button rw-button-small"
-//   >
-//     Show
-//   </Link>
-//   <Link
-//     to={routes.editItem({ id: item.id })}
-//     title={'Edit item ' + item.id}
-//     className="rw-button rw-button-small rw-button-blue"
-//   >
-//     Edit
-//   </Link>
-//   <button
-//     type="button"
-//     title={'Delete item ' + item.id}
-//     className="rw-button rw-button-small rw-button-red"
-//     onClick={() => onDeleteClick(item.id)}
-//   >
-//     Delete
-//   </button>
-// </nav>
+const MotionDropdownMenuTrigger = motion(DropdownMenuTrigger)
+
+function Wrapper({
+  children,
+  item,
+}: {
+  children: React.ReactNode
+  item: Props['item']
+}) {
+  const [open, setOpen] = useState(false)
+
+  const [deleteItem] = useMutation(DELETE_ITEM_MUTATION, {
+    onCompleted: () => {
+      toast.success('Deleted')
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+    refetchQueries: [{ query: ItemsQuery }],
+    awaitRefetchQueries: true,
+  })
+
+  const onDeleteClick = (id: DeleteItemMutationVariables['id']) => {
+    deleteItem({ variables: { id } })
+  }
+
+  return (
+    <motion.div
+      className="flex"
+      initial="initial"
+      animate={open ? 'animate' : 'initial'}
+      whileHover="animate"
+    >
+      <div className="flex-grow">{children}</div>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <MotionDropdownMenuTrigger
+          className="flex items-center justify-center"
+          variants={{
+            initial: { opacity: 0, width: 0 },
+            animate: { opacity: 1, width: 42 },
+          }}
+          transition={{ duration: 0.1, stiffness: 400, damping: 17 }}
+        >
+          <MoreVert className="h-6 w-6" />
+        </MotionDropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem asChild>
+            <Link
+              to={routes.item({ id: item.id })}
+              title={'Show item ' + item.id + ' detail'}
+            >
+              Show
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link
+              to={routes.editItem({ id: item.id })}
+              title={'Edit item ' + item.id}
+            >
+              Edit
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <button
+              type="button"
+              className="w-full text-left"
+              title={'Delete item ' + item.id}
+              onClick={() => onDeleteClick(item.id)}
+            >
+              Delete
+            </button>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </motion.div>
+  )
+}
