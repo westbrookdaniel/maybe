@@ -197,14 +197,16 @@ function Wrapper({
           <MoreVert className="h-6 w-6" />
         </MotionDropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem asChild>
-            <Link
-              to={routes.item({ id: item.id })}
-              title={'Show item ' + item.id + ' detail'}
-            >
-              Show
-            </Link>
-          </DropdownMenuItem>
+          {item.type !== 'todo' && (
+            <DropdownMenuItem asChild>
+              <Link
+                to={routes.item({ id: item.id })}
+                title={'Show item ' + item.id + ' detail'}
+              >
+                Show
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem asChild>
             <Link
               to={routes.editItem({ id: item.id })}

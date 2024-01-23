@@ -8,12 +8,15 @@ import {
   DatetimeLocalField,
   CheckboxField,
   Submit,
+  useWatch,
+  TextAreaField,
 } from '@redwoodjs/forms'
 
 import type { EditItemById, UpdateItemInput } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
 import { useAuth } from 'src/auth'
 import { friendlyType, types } from 'src/lib/validate'
+import { useState } from 'react'
 
 const formatDatetime = (value: string) => {
   if (value) {
@@ -30,6 +33,8 @@ interface ItemFormProps {
   loading: boolean
 }
 
+const defaultType = 'link'
+
 const ItemForm = (props: ItemFormProps) => {
   const { userMetadata } = useAuth()
 
@@ -44,8 +49,12 @@ const ItemForm = (props: ItemFormProps) => {
   }
 
   return (
-    <div className="rw-form-wrapper">
-      <Form<FormItem> onSubmit={onSubmit} error={props.error}>
+    <div className="rw-form-wrapper h-full">
+      <Form<FormItem>
+        onSubmit={onSubmit}
+        error={props.error}
+        className="flex h-full flex-col"
+      >
         <FormError
           error={props.error}
           wrapperClassName="rw-form-error-wrapper"
@@ -53,16 +62,11 @@ const ItemForm = (props: ItemFormProps) => {
           listClassName="rw-form-error-list"
         />
 
-        <Label
-          name="title"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Title
-        </Label>
+        <DynamicLinkField />
 
         <TextField
           name="title"
+          placeholder="Title"
           defaultValue={props.item?.title}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
@@ -71,22 +75,15 @@ const ItemForm = (props: ItemFormProps) => {
 
         <FieldError name="title" className="rw-field-error" />
 
-        <Label
-          name="description"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Description
-        </Label>
+        <DynamicTodoFields />
 
-        <TextField
-          name="description"
-          defaultValue={props.item?.description}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-        />
+        <div className="mt-8">
+          <Submit disabled={props.loading} className="button-primary w-full">
+            Save
+          </Submit>
+        </div>
 
-        <FieldError name="description" className="rw-field-error" />
+        <div className="flex-1" />
 
         <Label
           name="type"
@@ -98,7 +95,8 @@ const ItemForm = (props: ItemFormProps) => {
 
         <SelectField
           name="type"
-          defaultValue={props.item?.type}
+          placeholder="Type"
+          defaultValue={props.item?.type ?? defaultType}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
@@ -111,65 +109,73 @@ const ItemForm = (props: ItemFormProps) => {
         </SelectField>
 
         <FieldError name="type" className="rw-field-error" />
+      </Form>
+    </div>
+  )
+}
 
-        <Label
-          name="dueDate"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Due date
-        </Label>
+function DynamicTodoFields(props: { item?: EditItemById['item'] }) {
+  const type = useWatch({ name: 'type' }) ?? defaultType
+  const [date, setDate] = useState<string | undefined>(undefined)
 
-        <DatetimeLocalField
-          name="dueDate"
-          defaultValue={formatDatetime(props.item?.dueDate)}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-        />
+  return (
+    <>
+      {type !== 'todo' && (
+        <>
+          <TextAreaField
+            name="description"
+            placeholder="Description"
+            defaultValue={props.item?.description}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
 
-        <FieldError name="dueDate" className="rw-field-error" />
+          <FieldError name="description" className="rw-field-error" />
+        </>
+      )}
 
-        <Label
-          name="completed"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Completed
-        </Label>
+      {type === 'todo' && (
+        <>
+          <DatetimeLocalField
+            name="dueDate"
+            placeholder="Due Date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            defaultValue={formatDatetime(props.item?.dueDate)}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          />
 
-        <CheckboxField
-          name="completed"
-          defaultChecked={props.item?.completed}
-          className="checkbox"
-          errorClassName="rw-input rw-input-error"
-        />
+          <FieldError name="dueDate" className="rw-field-error" />
+        </>
+      )}
+    </>
+  )
+}
 
-        <FieldError name="completed" className="rw-field-error" />
+function DynamicLinkField(props: { item?: EditItemById['item'] }) {
+  const type = useWatch({ name: 'type' }) ?? defaultType
+  const [link, setLink] = useState<string | undefined>(undefined)
 
-        <Label
-          name="link"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Link
-        </Label>
-
+  return (
+    type === 'link' && (
+      <>
         <TextField
           name="link"
+          placeholder="Link"
+          autoFocus
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
           defaultValue={props.item?.link}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
         />
 
         <FieldError name="link" className="rw-field-error" />
-
-        <div className="rw-button-group">
-          <Submit disabled={props.loading} className="rw-button rw-button-blue">
-            Save
-          </Submit>
-        </div>
-      </Form>
-    </div>
+      </>
+    )
   )
 }
 
