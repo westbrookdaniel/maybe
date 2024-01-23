@@ -16,7 +16,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <NavLink
             className="w-20 rounded-lg p-1 text-center text-gray-400"
             activeClassName="!text-black"
-            to={routes.items()}
+            to={routes.keep()}
           >
             Keep
           </NavLink>
@@ -30,7 +30,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <NavLink
             className="w-20 rounded-lg p-1 text-center text-gray-400"
             activeClassName="!text-black"
-            to={routes.items()}
+            to={routes.discard()}
           >
             Discard
           </NavLink>

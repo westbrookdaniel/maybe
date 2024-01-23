@@ -30,6 +30,7 @@
     "framer-motion": "^10.18.0",
     "iconoir-react": "^7.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "vaul": "^0.8.0"
+    "vaul": "^0.8.0",
+    "zustand": "^4.5.0"
   }
 }

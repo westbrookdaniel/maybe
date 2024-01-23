@@ -21,13 +21,14 @@ const Routes = () => {
         <Set wrap={ScaffoldLayout} title="Items" titleTo="items" buttonLabel="New Item" buttonTo="home">
           <Route path="/items/{id:Int}/edit" page={ItemEditItemPage} name="editItem" />
           <Route path="/items/{id:Int}" page={ItemItemPage} name="item" />
-          <Route path="/items" page={ItemItemsPage} name="items" />
         </Set>
       </PrivateSet>
       <Set wrap={MainLayout}>
         <Route path="/" page={HomePage} name="home" />
+        <Route path="/keep" page={HomePage} name="keep" />
+        <Route path="/discard" page={HomePage} name="discard" />
+        <Route notfound page={NotFoundPage} />
       </Set>
-      <Route notfound page={NotFoundPage} />
     </Router>
   )
 }
