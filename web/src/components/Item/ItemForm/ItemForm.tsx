@@ -90,10 +90,13 @@ const ItemForm = (props: ItemFormProps) => {
 
         <ReturnDateField />
 
-        <div className="mt-8 flex space-x-4">
+        <div className="mt-8 space-y-2">
           <Submit disabled={props.loading} className="button-primary w-full">
             Save
           </Submit>
+          <button type="button" className="button w-full" onClick={props.onCancel}>
+            Cancel
+          </button>
         </div>
 
         <div className="flex-1" />
@@ -278,7 +281,7 @@ function CustomReturnField(props: { item?: EditItemById['item'] }) {
           />
         )}
       />
-      <Carousel className="ml-12 mr-12 mt-4" setApi={setApi}>
+      <Carousel className="ml-12 mr-12 mt-6" setApi={setApi}>
         <CarouselContent>
           {items.map((item, i) => (
             <CarouselItem key={i}>

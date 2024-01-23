@@ -121,6 +121,7 @@ function NoteItem({ item, index }: Props) {
 }
 
 function TodoItem({ item, index }: Props) {
+  // TODO
   const [c, onC] = React.useState(item.completed)
   return (
     <motion.div className="px-6 py-2" {...fadeInProps(index)}>
@@ -160,6 +161,8 @@ function Wrapper({
   children: React.ReactNode
   item: Props['item']
 }) {
+  const canHover = window.matchMedia('(hover: hover)').matches
+
   const [open, setOpen] = useState(false)
 
   const [deleteItem] = useMutation(DELETE_ITEM_MUTATION, {
@@ -181,7 +184,7 @@ function Wrapper({
     <motion.div
       className="flex"
       initial="initial"
-      animate={open ? 'animate' : 'initial'}
+      animate={open || !canHover ? 'animate' : 'initial'}
       whileHover="animate"
     >
       <div className="flex-grow">{children}</div>
