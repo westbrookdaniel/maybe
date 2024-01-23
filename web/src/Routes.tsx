@@ -9,24 +9,20 @@
 
 import { Set, Router, Route, PrivateSet } from '@redwoodjs/router'
 
-import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
-
 import { useAuth } from './auth'
 import MainLayout from './layouts/MainLayout/MainLayout'
 
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
-      <PrivateSet unauthenticated="home">
-        <Set wrap={ScaffoldLayout} title="Items" titleTo="items" buttonLabel="New Item" buttonTo="home">
+      <Set wrap={MainLayout}>
+        <PrivateSet unauthenticated="home">
           <Route path="/items/{id:Int}/edit" page={ItemEditItemPage} name="editItem" />
           <Route path="/items/{id:Int}" page={ItemItemPage} name="item" />
-        </Set>
-      </PrivateSet>
-      <Set wrap={MainLayout}>
+          <Route path="/keep" page={HomePage} name="keep" />
+          <Route path="/discard" page={HomePage} name="discard" />
+        </PrivateSet>
         <Route path="/" page={HomePage} name="home" />
-        <Route path="/keep" page={HomePage} name="keep" />
-        <Route path="/discard" page={HomePage} name="discard" />
         <Route notfound page={NotFoundPage} />
       </Set>
     </Router>

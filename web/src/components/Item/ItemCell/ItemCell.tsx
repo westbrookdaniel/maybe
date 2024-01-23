@@ -2,7 +2,7 @@ import type { FindItemById } from 'types/graphql'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import Item from 'src/components/Item/Item'
+import { ListItem } from 'src/components/Item/Items/ListItem'
 
 export const QUERY = gql`
   query FindItemById($id: Int!) {
@@ -22,7 +22,7 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => null
 
 export const Empty = () => <div>Item not found</div>
 
@@ -31,5 +31,5 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({ item }: CellSuccessProps<FindItemById>) => {
-  return <Item item={item} />
+  return <ListItem item={item} index={0} noTruncate />
 }

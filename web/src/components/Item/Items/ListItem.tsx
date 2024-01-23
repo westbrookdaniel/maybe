@@ -1,4 +1,4 @@
-import { relativeTimeTag } from 'src/lib/formatters'
+import { relativeTimeTag, truncate } from 'src/lib/formatters'
 import { DeleteItemMutationVariables, FindItems } from 'types/graphql'
 import { Link as LinkIcon, MoreVert } from 'iconoir-react'
 import { Link, routes } from '@redwoodjs/router'
@@ -25,33 +25,10 @@ const DELETE_ITEM_MUTATION = gql`
 
 const MotionLink = motion(Link)
 
-const itemVariants = {
-  visible: (i: number) => ({
-    opacity: 1,
-    scale: 1,
-    translateY: 0,
-    transition: {
-      delay: i * 0.05,
-    },
-  }),
-  hidden: {
-    opacity: 0,
-    scale: 0.98,
-    translateY: 20,
-  },
-}
-
-const fadeInProps = (i: number) => ({
-  custom: i,
-  initial: 'hidden',
-  animate: 'visible',
-  variants: itemVariants,
-  transition: { type: 'spring', stiffness: 400, damping: 17 },
-})
-
 interface Props {
   item: FindItems['items'][number]
   index: number
+  noTruncate?: boolean
 }
 
 export function ListItem(props: Props) {
@@ -70,28 +47,33 @@ export function ListItem(props: Props) {
       throw new Error(`Unknown item type: ${props.item.type}`)
   }
 
-  return <Wrapper item={props.item}>{comp}</Wrapper>
+  return (
+    <Wrapper index={props.index} item={props.item}>
+      {comp}
+    </Wrapper>
+  )
 }
 
 function Container({ children }: { children: React.ReactNode }) {
   return <div className="rounded-2xl bg-white p-6">{children}</div>
 }
 
-function LinkItem({ item, index }: Props) {
+function LinkItem({ item, noTruncate }: Props) {
   return (
     <motion.a
       href={item.link}
       target="_blank"
       rel="noopener noreferrer"
       className="rounded-2xl"
-      {...fadeInProps(index)}
     >
       <Container>
         <div className="flex justify-between">
           <div className="flex flex-col space-y-4">
             <p className="underline decoration-gray-300">{item.title}</p>
             {!!item.description && (
-              <p className="text-pretty">{item.description}</p>
+              <p className="text-pretty">
+                {noTruncate ? item.description : truncate(item.description)}
+              </p>
             )}
           </div>
           <LinkIcon width={24} />
@@ -101,18 +83,16 @@ function LinkItem({ item, index }: Props) {
   )
 }
 
-function NoteItem({ item, index }: Props) {
+function NoteItem({ item, noTruncate }: Props) {
   return (
-    <MotionLink
-      to={routes.item({ id: item.id })}
-      className="rounded-2xl"
-      {...fadeInProps(index)}
-    >
+    <MotionLink to={routes.item({ id: item.id })} className="rounded-2xl">
       <Container>
         <div className="flex flex-col space-y-4">
           <p>{item.title}</p>
           {!!item.description && (
-            <p className="text-pretty">{item.description}</p>
+            <p className="text-pretty">
+              {noTruncate ? item.description : truncate(item.description)}
+            </p>
           )}
         </div>
       </Container>
@@ -120,18 +100,20 @@ function NoteItem({ item, index }: Props) {
   )
 }
 
-function TodoItem({ item, index }: Props) {
+function TodoItem({ item, noTruncate }: Props) {
   // TODO
   const [c, onC] = React.useState(item.completed)
   return (
-    <motion.div className="px-6 py-2" {...fadeInProps(index)}>
+    <motion.div className="px-6 py-2">
       <Checkbox checked={c} onChange={onC}>
         <Checkbox.Indicator />
         <Checkbox.Label>
           <div className="flex flex-col space-y-2">
             <p>{item.title}</p>
             {!!item.description && (
-              <p className="text-pretty">{item.description}</p>
+              <p className="text-pretty">
+                {noTruncate ? item.description : truncate(item.description)}
+              </p>
             )}
             {!!item.dueDate && (
               <p
@@ -154,12 +136,43 @@ function TodoItem({ item, index }: Props) {
 
 const MotionDropdownMenuTrigger = motion(DropdownMenuTrigger)
 
+const itemVariants = {
+  initial: (i: number) => ({
+    opacity: 1,
+    scale: 1,
+    translateY: 0,
+    transition: {
+      delay: i * 0.05,
+    },
+  }),
+  animate: {
+    opacity: 1,
+    scale: 1,
+    translateY: 0,
+  },
+  hidden: {
+    opacity: 0,
+    scale: 0.98,
+    translateY: 20,
+  },
+}
+
+const fadeInProps = (i: number) => ({
+  custom: i,
+  initial: 'hidden',
+  animate: 'visible',
+  variants: itemVariants,
+  transition: { type: 'spring', stiffness: 400, damping: 17 },
+})
+
 function Wrapper({
   children,
   item,
+  index,
 }: {
   children: React.ReactNode
   item: Props['item']
+  index: number
 }) {
   const canHover = window.matchMedia('(hover: hover)').matches
 
@@ -183,7 +196,8 @@ function Wrapper({
   return (
     <motion.div
       className="flex"
-      initial="initial"
+      {...fadeInProps(index)}
+      initial="hidden"
       animate={open || !canHover ? 'animate' : 'initial'}
       whileHover="animate"
     >

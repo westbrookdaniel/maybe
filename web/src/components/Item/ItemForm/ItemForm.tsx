@@ -90,41 +90,45 @@ const ItemForm = (props: ItemFormProps) => {
 
         <ReturnDateField />
 
+        <div className="mt-8 flex items-center space-x-4">
+          <Label
+            name="type"
+            className="rw-label !mt-2"
+            errorClassName="rw-label rw-label-error"
+          >
+            Type
+          </Label>
+
+          <SelectField
+            name="type"
+            placeholder="Type"
+            defaultValue={props.item?.type ?? defaultType}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          >
+            {types.map((type) => (
+              <option key={type} value={type}>
+                {friendlyType(type)}
+              </option>
+            ))}
+          </SelectField>
+        </div>
+
+        <FieldError name="type" className="rw-field-error" />
+
         <div className="mt-8 space-y-2">
           <Submit disabled={props.loading} className="button-primary w-full">
             Save
           </Submit>
-          <button type="button" className="button w-full" onClick={props.onCancel}>
+          <button
+            type="button"
+            className="button w-full"
+            onClick={props.onCancel}
+          >
             Cancel
           </button>
         </div>
-
-        <div className="flex-1" />
-
-        <Label
-          name="type"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Type
-        </Label>
-
-        <SelectField
-          name="type"
-          placeholder="Type"
-          defaultValue={props.item?.type ?? defaultType}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        >
-          {types.map((type) => (
-            <option key={type} value={type}>
-              {friendlyType(type)}
-            </option>
-          ))}
-        </SelectField>
-
-        <FieldError name="type" className="rw-field-error" />
       </Form>
     </div>
   )
@@ -281,7 +285,7 @@ function CustomReturnField(props: { item?: EditItemById['item'] }) {
           />
         )}
       />
-      <Carousel className="ml-12 mr-12 mt-6" setApi={setApi}>
+      <Carousel className="ml-12 mr-12 mt-10" setApi={setApi}>
         <CarouselContent>
           {items.map((item, i) => (
             <CarouselItem key={i}>
