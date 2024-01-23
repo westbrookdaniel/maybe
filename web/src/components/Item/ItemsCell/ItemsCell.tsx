@@ -18,6 +18,7 @@ export const QUERY = gql`
       completed
       link
       userId
+      returnDate
     }
   }
 `

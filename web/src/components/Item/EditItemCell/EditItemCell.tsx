@@ -20,6 +20,7 @@ export const QUERY = gql`
       completed
       link
       userId
+      returnDate
     }
   }
 `
@@ -36,6 +37,7 @@ const UPDATE_ITEM_MUTATION = gql`
       completed
       link
       userId
+      returnDate
     }
   }
 `
@@ -69,7 +71,13 @@ export const Success = ({ item }: CellSuccessProps<EditItemById>) => {
         </h2>
       </header>
       <div className="rw-segment-main">
-        <ItemForm item={item} onSave={onSave} error={error} loading={loading} />
+        <ItemForm
+          item={item}
+          onSave={onSave}
+          error={error}
+          loading={loading}
+          onCancel={() => {}}
+        />
       </div>
     </div>
   )

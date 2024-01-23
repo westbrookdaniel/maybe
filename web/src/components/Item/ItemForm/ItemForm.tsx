@@ -1,22 +1,31 @@
 import {
   Form,
   FormError,
-  FieldError,
   Label,
   TextField,
   SelectField,
   DatetimeLocalField,
-  CheckboxField,
+  FieldError,
   Submit,
   useWatch,
   TextAreaField,
+  Controller,
+  useFormContext,
 } from '@redwoodjs/forms'
 
 import type { EditItemById, UpdateItemInput } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
 import { useAuth } from 'src/auth'
 import { friendlyType, types } from 'src/lib/validate'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from 'src/components/Carousel/Carousel'
 
 const formatDatetime = (value: string) => {
   if (value) {
@@ -29,6 +38,7 @@ type FormItem = NonNullable<EditItemById['item']>
 interface ItemFormProps {
   item?: EditItemById['item']
   onSave: (data: UpdateItemInput, id?: FormItem['id']) => void
+  onCancel: () => void
   error: RWGqlError
   loading: boolean
 }
@@ -43,6 +53,7 @@ const ItemForm = (props: ItemFormProps) => {
       {
         ...data,
         userId: userMetadata.sub,
+        returnTo: 'maybe',
       },
       props?.item?.id
     )
@@ -77,7 +88,9 @@ const ItemForm = (props: ItemFormProps) => {
 
         <DynamicTodoFields />
 
-        <div className="mt-8">
+        <ReturnDateField />
+
+        <div className="mt-8 flex space-x-4">
           <Submit disabled={props.loading} className="button-primary w-full">
             Save
           </Submit>
@@ -176,6 +189,114 @@ function DynamicLinkField(props: { item?: EditItemById['item'] }) {
         <FieldError name="link" className="rw-field-error" />
       </>
     )
+  )
+}
+
+function ReturnDateField(props: { item?: EditItemById['item'] }) {
+  return (
+    <>
+      {props.item?.returnDate ? (
+        <>
+          <label className="rw-label">Return Date</label>
+
+          <DatetimeLocalField
+            name="returnDate"
+            placeholder="Return Date"
+            defaultValue={formatDatetime(props.item?.returnDate)}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          />
+        </>
+      ) : (
+        <CustomReturnField item={props.item} />
+      )}
+
+      <FieldError name="returnDate" className="rw-field-error" />
+    </>
+  )
+}
+
+function CustomReturnField(props: { item?: EditItemById['item'] }) {
+  const [api, setApi] = useState<CarouselApi>()
+  const { setValue } = useFormContext()
+
+  const items = [
+    { value: 'tomorrow', label: 'Tomorrow' },
+    { value: 'next-week', label: 'Next Week' },
+    { value: 'next-month', label: 'Next Month' },
+    { value: 'next-year', label: 'Next Year' },
+  ]
+
+  function set(n: number) {
+    const item = items[n].value
+    // Get date relative to today
+    const date = new Date()
+    switch (item) {
+      case 'tomorrow':
+        date.setDate(date.getDate() + 1)
+        break
+      case 'next-week':
+        date.setDate(date.getDate() + 7)
+        break
+      case 'next-month':
+        date.setMonth(date.getMonth() + 1)
+        break
+      case 'next-year':
+        date.setFullYear(date.getFullYear() + 1)
+        break
+    }
+    setValue('returnDate', date.toISOString())
+  }
+
+  useEffect(() => {
+    if (!api) {
+      return
+    }
+
+    set(api.selectedScrollSnap())
+
+    api.on('select', () => {
+      set(api.selectedScrollSnap())
+    })
+  }, [api])
+
+  return (
+    <>
+      <Controller
+        name="returnDate"
+        defaultValue={formatDatetime(props.item?.returnDate)}
+        rules={{ required: true }}
+        render={({ field: { onChange, onBlur, value, name, ref } }) => (
+          <input
+            onChange={onChange}
+            onBlur={onBlur}
+            value={value}
+            name={name}
+            type="hidden"
+            ref={ref}
+          />
+        )}
+      />
+      <Carousel className="ml-12 mr-12 mt-4" setApi={setApi}>
+        <CarouselContent>
+          {items.map((item, i) => (
+            <CarouselItem key={i}>
+              <div className="p-1">
+                <div className="flex flex-col items-center justify-center rounded-2xl bg-gray-100 p-6 p-6">
+                  <span className="pb-2 pt-2">Remind Me</span>
+                  <span className="pb-2 text-2xl font-semibold">
+                    {item.label}
+                  </span>
+                </div>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    </>
   )
 }
 

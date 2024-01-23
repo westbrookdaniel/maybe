@@ -70,8 +70,13 @@ const NewItemButton = () => {
         </motion.button>
       }
       content={
-        <div className="pt-4 h-full">
-          <ItemForm onSave={onSave} loading={loading} error={error} />
+        <div className="h-full pt-4">
+          <ItemForm
+            onSave={onSave}
+            loading={loading}
+            error={error}
+            onCancel={() => setOpen(false)}
+          />
         </div>
       }
     />

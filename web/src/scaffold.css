@@ -158,10 +158,9 @@
 }
 .rw-field-error {
   @apply mt-2 block text-xs font-semibold lowercase text-red-600;
-
-  &:first-letter {
-    @apply uppercase;
-  }
+}
+.rw-field-error:first-letter {
+  @apply uppercase;
 }
 .rw-table-wrapper-responsive {
   @apply overflow-x-auto;

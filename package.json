@@ -26,6 +26,7 @@
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@tailwindcss/forms": "^0.5.7",
+    "embla-carousel-react": "^8.0.0-rc19",
     "framer-motion": "^10.18.0",
     "iconoir-react": "^7.3.0",
     "tailwindcss-animate": "^1.0.7",

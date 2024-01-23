@@ -35,7 +35,12 @@ const NewItem = () => {
         <h2 className="rw-heading rw-heading-secondary">New Item</h2>
       </header>
       <div className="rw-segment-main">
-        <ItemForm onSave={onSave} loading={loading} error={error} />
+        <ItemForm
+          onSave={onSave}
+          loading={loading}
+          error={error}
+          onCancel={() => {}}
+        />
       </div>
     </div>
   )
