@@ -73,7 +73,7 @@ const ItemForm = (props: ItemFormProps) => {
           listClassName="rw-form-error-list"
         />
 
-        <DynamicLinkField />
+        <DynamicLinkField item={props.item} />
 
         <TextField
           name="title"
@@ -86,9 +86,9 @@ const ItemForm = (props: ItemFormProps) => {
 
         <FieldError name="title" className="rw-field-error" />
 
-        <DynamicTodoFields />
+        <DynamicTodoFields item={props.item} />
 
-        <ReturnDateField />
+        <ReturnDateField item={props.item} />
 
         <div className="mt-8 flex items-center space-x-4">
           <Label
@@ -135,7 +135,7 @@ const ItemForm = (props: ItemFormProps) => {
 }
 
 function DynamicTodoFields(props: { item?: EditItemById['item'] }) {
-  const type = useWatch({ name: 'type' }) ?? defaultType
+  const type = useWatch({ name: 'type' }) ?? props.item?.type ?? defaultType
   const [date, setDate] = useState<string | undefined>(undefined)
 
   return (
@@ -175,7 +175,7 @@ function DynamicTodoFields(props: { item?: EditItemById['item'] }) {
 }
 
 function DynamicLinkField(props: { item?: EditItemById['item'] }) {
-  const type = useWatch({ name: 'type' }) ?? defaultType
+  const type = useWatch({ name: 'type' }) ?? props.item?.type ?? defaultType
   const [link, setLink] = useState<string | undefined>(undefined)
 
   return (
