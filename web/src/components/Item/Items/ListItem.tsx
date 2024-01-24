@@ -1,5 +1,5 @@
 import { relativeTimeTag, truncate } from 'src/lib/formatters'
-import { DeleteItemMutationVariables, FindItems } from 'types/graphql'
+import { DeleteItemMutationVariables, FindItemsMaybe } from 'types/graphql'
 import { Link as LinkIcon, MoreVert } from 'iconoir-react'
 import { Link, routes } from '@redwoodjs/router'
 import Checkbox from 'src/components/Form/Checkbox'
@@ -13,7 +13,7 @@ import {
 import { useState } from 'react'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/dist/toast'
-import { QUERY as ItemsQuery } from 'src/components/Item/ItemsCell'
+import { QUERY as ItemsQuery } from 'src/components/Item/ItemsCell/ItemsMaybeCell'
 
 const DELETE_ITEM_MUTATION = gql`
   mutation DeleteItemMutation($id: Int!) {
@@ -26,7 +26,7 @@ const DELETE_ITEM_MUTATION = gql`
 const MotionLink = motion(Link)
 
 interface Props {
-  item: FindItems['items'][number]
+  item: FindItemsMaybe['itemsMaybe'][number]
   index: number
   noTruncate?: boolean
 }

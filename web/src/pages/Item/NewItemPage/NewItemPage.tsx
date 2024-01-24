@@ -4,7 +4,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import { CreateItemInput } from 'types/graphql'
 import { motion } from 'framer-motion'
 import ItemForm from 'src/components/Item/ItemForm'
-import { QUERY as ItemsQuery } from 'src/components/Item/ItemsCell'
+import { QUERY as ItemsQuery } from 'src/components/Item/ItemsCell/ItemsMaybeCell'
 
 const CREATE_ITEM_MUTATION = gql`
   mutation CreateItemMutation($input: CreateItemInput!) {

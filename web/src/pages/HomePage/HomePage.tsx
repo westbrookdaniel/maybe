@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useAuth } from 'src/auth'
-import ItemsCell from 'src/components/Item/ItemsCell'
+import ItemsCell from 'src/components/Item/ItemsCell/ItemsMaybeCell'
 import NewItemButton from 'src/components/Item/NewItemButton/NewItemButton'
 
 const itemVariants = {

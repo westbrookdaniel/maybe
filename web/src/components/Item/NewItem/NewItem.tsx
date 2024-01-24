@@ -17,8 +17,8 @@ const CREATE_ITEM_MUTATION = gql`
 const NewItem = () => {
   const [createItem, { loading, error }] = useMutation(CREATE_ITEM_MUTATION, {
     onCompleted: () => {
-      toast.success('Item created')
-      navigate(routes.items())
+      toast.success('Created')
+      navigate(routes.home())
     },
     onError: (error) => {
       toast.error(error.message)

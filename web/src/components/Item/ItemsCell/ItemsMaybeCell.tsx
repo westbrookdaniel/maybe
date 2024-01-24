@@ -1,13 +1,13 @@
-import type { FindItems } from 'types/graphql'
+import type { FindItemsMaybe } from 'types/graphql'
 
-import { Link, routes } from '@redwoodjs/router'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import Items from 'src/components/Item/Items'
+import AllEmpty from 'src/components/Empty/AllEmpty'
 
 export const QUERY = gql`
-  query FindItems {
-    items {
+  query FindItemsMaybe {
+    itemsMaybe {
       id
       title
       description
@@ -26,17 +26,13 @@ export const QUERY = gql`
 export const Loading = () => null
 
 export const Empty = () => {
-  return (
-    <div className="rw-text-center">
-      {'All Empty'}
-    </div>
-  )
+  return <AllEmpty />
 }
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ items }: CellSuccessProps<FindItems>) => {
-  return <Items items={items} />
+export const Success = ({ itemsMaybe }: CellSuccessProps<FindItemsMaybe>) => {
+  return <Items itemsMaybe={itemsMaybe} />
 }

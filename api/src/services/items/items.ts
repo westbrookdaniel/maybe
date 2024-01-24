@@ -7,6 +7,18 @@ export const items: QueryResolvers['items'] = () => {
   return db.item.findMany()
 }
 
+export const itemsMaybe: QueryResolvers['items'] = () => {
+  return db.item.findMany({ where: { category: 'maybe' } })
+}
+
+export const itemsKeep: QueryResolvers['items'] = () => {
+  return db.item.findMany({ where: { category: 'keep' } })
+}
+
+export const itemsDiscard: QueryResolvers['items'] = () => {
+  return db.item.findMany({ where: { category: 'discard' } })
+}
+
 export const item: QueryResolvers['item'] = ({ id }) => {
   return db.item.findUnique({
     where: { id },

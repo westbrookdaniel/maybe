@@ -17,6 +17,9 @@ export const schema = gql`
 
   type Query {
     items: [Item!]! @requireAuth
+    itemsMaybe: [Item!]! @requireAuth
+    itemsKeep: [Item!]! @requireAuth
+    itemsDiscard: [Item!]! @requireAuth
     item(id: Int!): Item @requireAuth
   }
 
