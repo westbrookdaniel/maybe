@@ -2,12 +2,12 @@ import type { FindItemsKeep } from 'types/graphql'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import Items from 'src/components/Item/Items'
 import AllEmpty from 'src/components/Empty/AllEmpty'
+import Items from 'src/components/Item/Items'
 
 export const QUERY = gql`
   query FindItemsKeep {
-    itemsKeep {
+    itemsDiscard {
       id
       title
       description
@@ -33,6 +33,6 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ itemsKeep }: CellSuccessProps<FindItemsKeep>) => {
-  return <Items itemsMaybe={itemsKeep} />
+export const Success = ({ itemsDiscard }: CellSuccessProps<FindItemsKeep>) => {
+  return <Items itemsMaybe={itemsDiscard} />
 }

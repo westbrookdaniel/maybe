@@ -26,6 +26,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from 'src/components/Carousel/Carousel'
+import { relativeTimeTag } from 'src/lib/formatters'
 
 const formatDatetime = (value: string) => {
   if (value) {
@@ -53,6 +54,7 @@ const ItemForm = (props: ItemFormProps) => {
       {
         ...data,
         userId: userMetadata.sub,
+        category: 'keep',
         returnTo: 'maybe',
       },
       props?.item?.id
@@ -164,7 +166,6 @@ function DynamicTodoFields(props: { item?: EditItemById['item'] }) {
             defaultValue={formatDatetime(props.item?.dueDate)}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
           />
 
           <FieldError name="dueDate" className="rw-field-error" />
@@ -203,6 +204,7 @@ function DynamicLinkField(props: { item?: EditItemById['item'] }) {
 }
 
 function ReturnDateField(props: { item?: EditItemById['item'] }) {
+  const returnDate = useWatch({ name: 'returnDate' }) ?? props.item?.returnDate
   return (
     <>
       {props.item?.returnDate ? (
@@ -217,6 +219,12 @@ function ReturnDateField(props: { item?: EditItemById['item'] }) {
             errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
+
+          {!!returnDate && (
+            <p className="mt-2 text-sm text-gray-500">
+              Returns {relativeTimeTag(returnDate)}
+            </p>
+          )}
         </>
       ) : (
         <CustomReturnField item={props.item} />

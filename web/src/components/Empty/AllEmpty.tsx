@@ -27,7 +27,7 @@ const fadeInProps = (i: number) => ({
 export default function AllEmpty() {
   return (
     <motion.div className="rw-text-center" {...fadeInProps(0)}>
-      {'All Empty'}
+      {'Nothing here'}
     </motion.div>
   )
 }

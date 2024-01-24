@@ -29,6 +29,8 @@ interface Props {
   item: FindItemsMaybe['itemsMaybe'][number]
   index: number
   noTruncate?: boolean
+  noShow?: boolean
+  alwaysVisible?: boolean
 }
 
 export function ListItem(props: Props) {
@@ -47,11 +49,7 @@ export function ListItem(props: Props) {
       throw new Error(`Unknown item type: ${props.item.type}`)
   }
 
-  return (
-    <Wrapper index={props.index} item={props.item}>
-      {comp}
-    </Wrapper>
-  )
+  return <Wrapper {...props}>{comp}</Wrapper>
 }
 
 function Container({ children }: { children: React.ReactNode }) {
@@ -166,14 +164,12 @@ const fadeInProps = (i: number) => ({
 })
 
 function Wrapper({
-  children,
   item,
   index,
-}: {
-  children: React.ReactNode
-  item: Props['item']
-  index: number
-}) {
+  children,
+  noShow,
+  alwaysVisible,
+}: Props & { children: React.ReactNode }) {
   const canHover = window.matchMedia('(hover: hover)').matches
 
   const [open, setOpen] = useState(false)
@@ -198,7 +194,7 @@ function Wrapper({
       className="flex"
       {...fadeInProps(index)}
       initial="hidden"
-      animate={open || !canHover ? 'animate' : 'initial'}
+      animate={open || !canHover || alwaysVisible ? 'animate' : 'initial'}
       whileHover="animate"
     >
       <div className="flex-grow">{children}</div>
@@ -214,7 +210,7 @@ function Wrapper({
           <MoreVert className="h-6 w-6" />
         </MotionDropdownMenuTrigger>
         <DropdownMenuContent>
-          {item.type !== 'todo' && (
+          {item.type !== 'todo' && !noShow && (
             <DropdownMenuItem asChild>
               <Link
                 to={routes.item({ id: item.id })}
