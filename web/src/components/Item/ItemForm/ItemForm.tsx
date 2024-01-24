@@ -178,6 +178,9 @@ function DynamicLinkField(props: { item?: EditItemById['item'] }) {
   const type = useWatch({ name: 'type' }) ?? props.item?.type ?? defaultType
   const [link, setLink] = useState<string | undefined>(undefined)
 
+  // TODO once you paste a link in this it should try and
+  // pull the info for the rest of the form if empty
+
   return (
     type === 'link' && (
       <>

@@ -101,7 +101,7 @@ function NoteItem({ item, noTruncate }: Props) {
 }
 
 function TodoItem({ item, noTruncate }: Props) {
-  // TODO
+  // TODO actually have completed checking working
   const [c, onC] = React.useState(item.completed)
   return (
     <motion.div className="px-6 py-2">

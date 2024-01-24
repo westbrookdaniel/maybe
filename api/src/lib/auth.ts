@@ -36,7 +36,6 @@ export const getCurrentUser = async (
     return null
   }
 
-  // TODO had to type cast this?
   const roles = decoded[process.env.AUTH0_AUDIENCE + '/roles'] as string[]
 
   if (roles) {
