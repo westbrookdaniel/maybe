@@ -17,6 +17,7 @@ const Routes = () => {
     <Router useAuth={useAuth}>
       <Set wrap={MainLayout}>
         <PrivateSet unauthenticated="home">
+          <Route path="/items/new" page={ItemNewItemPage} name="newItem" />
           <Route path="/items/{id:Int}/edit" page={ItemEditItemPage} name="editItem" />
           <Route path="/items/{id:Int}" page={ItemItemPage} name="item" />
           <Route path="/keep" page={HomePage} name="keep" />
