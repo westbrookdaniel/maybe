@@ -248,7 +248,7 @@ function Wrapper({
       animate={open || !canHover || alwaysVisible ? 'animate' : 'initial'}
       whileHover="animate"
     >
-      <div className="flex-grow">{children}</div>
+      <div className="flex-1">{children}</div>
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <MotionDropdownMenuTrigger
           className="flex items-center justify-center"
