@@ -12,7 +12,7 @@ import {
   Controller,
   useFormContext,
 } from '@redwoodjs/forms'
-
+import { useQuery } from '@redwoodjs/web'
 import type { EditItemById, UpdateItemInput } from 'types/graphql'
 import type { RWGqlError } from '@redwoodjs/forms'
 import { useAuth } from 'src/auth'
@@ -27,6 +27,7 @@ import {
   CarouselPrevious,
 } from 'src/components/Carousel/Carousel'
 import { relativeTimeTag } from 'src/lib/formatters'
+import { LoaderIcon } from '@redwoodjs/web/dist/toast'
 
 const formatDatetime = (value: string) => {
   if (value) {
@@ -175,27 +176,66 @@ function DynamicTodoFields(props: { item?: EditItemById['item'] }) {
   )
 }
 
+const LINK_PREVIEW_QUERY = gql`
+  query LinkPreviewQuery($url: String!) {
+    linkPreview(url: $url)
+  }
+`
+
 function DynamicLinkField(props: { item?: EditItemById['item'] }) {
   const type = useWatch({ name: 'type' }) ?? props.item?.type ?? defaultType
+  const { setValue, getValues } = useFormContext()
   const [link, setLink] = useState<string | undefined>(undefined)
+  const [loading, setLoading] = useState(false)
+
+  const { refetch } = useQuery(LINK_PREVIEW_QUERY, {
+    initialFetchPolicy: 'standby',
+    fetchPolicy: 'cache-first',
+  })
 
   // TODO once you paste a link in this it should try and
   // pull the info for the rest of the form if empty
+  useEffect(() => {
+    if (type === 'link' && link) {
+      try {
+        setLoading(true)
+        refetch({ url: link })
+          .then((data) => {
+            const it = data.data.linkPreview
+            const values = getValues()
+            if (!values.title) {
+              const title = it.title
+              setValue('title', title)
+            }
+            if (!values.description) {
+              const description = it.description
+              setValue('description', description)
+            }
+          })
+          .finally(() => {
+            setLoading(false)
+          })
+      } catch {}
+    }
+  }, [type, link])
 
   return (
     type === 'link' && (
       <>
-        <TextField
-          name="link"
-          placeholder="Link"
-          autoFocus
-          value={link}
-          onChange={(e) => setLink(e.target.value)}
-          defaultValue={props.item?.link}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
+        <div className="flex items-center">
+          <TextField
+            name="link"
+            placeholder="Link"
+            autoFocus
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+            defaultValue={props.item?.link}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          />
+          {loading && <LoaderIcon className="ml-2 mt-2 !h-4 !w-4" />}
+        </div>
 
         <FieldError name="link" className="rw-field-error" />
       </>
@@ -207,7 +247,7 @@ function ReturnDateField(props: { item?: EditItemById['item'] }) {
   const returnDate = useWatch({ name: 'returnDate' }) ?? props.item?.returnDate
   return (
     <>
-      {props.item?.returnDate ? (
+      {props.item ? (
         <>
           <label className="rw-label">Return Date</label>
 
@@ -302,7 +342,7 @@ function CustomReturnField(props: { item?: EditItemById['item'] }) {
             <CarouselItem key={i}>
               <div className="p-1">
                 <div className="flex flex-col items-center justify-center rounded-2xl bg-gray-100 p-6 p-6">
-                  <span className="pb-2 pt-2">Remind Me</span>
+                  <span className="pb-2 pt-2">Keep Until</span>
                   <span className="pb-2 text-2xl font-semibold">
                     {item.label}
                   </span>

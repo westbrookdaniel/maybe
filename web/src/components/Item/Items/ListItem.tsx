@@ -17,7 +17,8 @@ import {
 import { useState } from 'react'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/dist/toast'
-import { QUERY as ItemsQuery } from 'src/components/Item/ItemsCell/ItemsMaybeCell'
+import { QUERY as ItemsMaybeQuery } from 'src/components/Item/ItemsCell/ItemsMaybeCell'
+import { QUERY as ItemsKeepQuery } from 'src/components/Item/ItemsCell/ItemsKeepCell'
 
 const DELETE_ITEM_MUTATION = gql`
   mutation DeleteItemMutation($id: Int!) {
@@ -102,8 +103,8 @@ function NoteItem({ item, noTruncate }: Props) {
   )
 }
 
-const UPDATE_ITEM_MUTATION = gql`
-  mutation UpdateItemMutation($id: Int!, $input: UpdateItemInput!) {
+const CHECK_ITEM_MUTATION = gql`
+  mutation CheckItemMutation($id: Int!, $input: UpdateItemInput!) {
     updateItem(id: $id, input: $input) {
       id
       title
@@ -121,7 +122,7 @@ const UPDATE_ITEM_MUTATION = gql`
 `
 
 function TodoItem({ item, noTruncate }: Props) {
-  const [updateItem, { data }] = useMutation(UPDATE_ITEM_MUTATION, {
+  const [updateItem, { data }] = useMutation(CHECK_ITEM_MUTATION, {
     onError: (error) => {
       toast.error(error.message)
     },
@@ -231,7 +232,7 @@ function Wrapper({
     onError: (error) => {
       toast.error(error.message)
     },
-    refetchQueries: [{ query: ItemsQuery }],
+    refetchQueries: [{ query: ItemsMaybeQuery }, { query: ItemsKeepQuery }],
     awaitRefetchQueries: true,
   })
 
@@ -282,10 +283,10 @@ function Wrapper({
             <button
               type="button"
               className="w-full text-left"
-              title={'Delete item ' + item.id}
+              title={'Discard item ' + item.id}
               onClick={() => onDeleteClick(item.id)}
             >
-              Delete
+              Discard
             </button>
           </DropdownMenuItem>
         </DropdownMenuContent>

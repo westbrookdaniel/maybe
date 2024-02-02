@@ -21,7 +21,6 @@ const Routes = () => {
           <Route path="/items/{id:Int}/edit" page={ItemEditItemPage} name="editItem" />
           <Route path="/items/{id:Int}" page={ItemItemPage} name="item" />
           <Route path="/keep" page={KeepPage} name="keep" />
-          <Route path="/discard" page={DiscardPage} name="discard" />
         </PrivateSet>
         <Route path="/" page={HomePage} name="home" />
         <Route notfound page={NotFoundPage} />

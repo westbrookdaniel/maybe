@@ -1,26 +1,22 @@
 import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+import grabity from 'grabity'
 
 import { db } from 'src/lib/db'
 import { validateCategory, validateType } from 'src/lib/validate'
 
-export const items: QueryResolvers['items'] = () => {
-  checkAndMoveItems()
+export const items: QueryResolvers['items'] = async () => {
+  await checkAndMoveItems()
   return db.item.findMany()
 }
 
-export const itemsMaybe: QueryResolvers['items'] = () => {
-  checkAndMoveItems()
+export const itemsMaybe: QueryResolvers['items'] = async () => {
+  await checkAndMoveItems()
   return db.item.findMany({ where: { category: 'maybe' } })
 }
 
-export const itemsKeep: QueryResolvers['items'] = () => {
-  checkAndMoveItems()
+export const itemsKeep: QueryResolvers['items'] = async () => {
+  await checkAndMoveItems()
   return db.item.findMany({ where: { category: 'keep' } })
-}
-
-export const itemsDiscard: QueryResolvers['items'] = () => {
-  checkAndMoveItems()
-  return db.item.findMany({ where: { category: 'discard' } })
 }
 
 export const item: QueryResolvers['item'] = ({ id }) => {
@@ -51,7 +47,26 @@ export const deleteItem: MutationResolvers['deleteItem'] = ({ id }) => {
   })
 }
 
-function checkAndMoveItems() {
-  // TODO, this should check if the item is in the correct category
-  // if not, move it to the correct category
+export const linkPreview: MutationResolvers['linkPreview'] = ({ url }) => {
+  return grabity.grabIt(url)
+}
+
+async function checkAndMoveItems() {
+  const items = await db.item.findMany()
+  const today = new Date()
+  for (const item of items) {
+    if (item.returnTo) {
+      const returnDate = new Date(item.returnDate)
+      if (today > returnDate) {
+        await db.item.update({
+          where: { id: item.id },
+          data: {
+            category: item.returnTo,
+            returnTo: null,
+            returnDate: null,
+          },
+        })
+      }
+    }
+  }
 }

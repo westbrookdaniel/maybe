@@ -27,13 +27,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           >
             Maybe
           </NavLink>
-          <NavLink
-            className="w-20 rounded-lg p-1 text-center text-gray-400"
-            activeClassName="!text-black"
-            to={routes.discard()}
-          >
-            Discard
-          </NavLink>
         </nav>
         <div className="flex flex-1 justify-end">
           {/* <input type="text" placeholder="Search..." /> */}

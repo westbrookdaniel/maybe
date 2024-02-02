@@ -21,6 +21,7 @@ export const schema = gql`
     itemsKeep: [Item!]! @requireAuth
     itemsDiscard: [Item!]! @requireAuth
     item(id: Int!): Item @requireAuth
+    linkPreview(url: String!): JSONObject! @requireAuth
   }
 
   input CreateItemInput {
