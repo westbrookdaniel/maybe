@@ -2,8 +2,8 @@ import type { FindItemsMaybe } from 'types/graphql'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import Items from 'src/components/Item/Items'
 import AllEmpty from 'src/components/Empty/AllEmpty'
+import Items from 'src/components/Item/Items'
 
 export const QUERY = gql`
   query FindItemsMaybe {

@@ -1,8 +1,8 @@
 import * as React from 'react'
+
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react'
-
 import { ArrowLeft, ArrowRight } from 'iconoir-react'
 
 type CarouselApi = UseEmblaCarouselType[1]

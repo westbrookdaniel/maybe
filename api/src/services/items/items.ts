@@ -1,5 +1,5 @@
-import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 import grabity from 'grabity'
+import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
 import { db } from 'src/lib/db'
 import { validateCategory, validateType } from 'src/lib/validate'

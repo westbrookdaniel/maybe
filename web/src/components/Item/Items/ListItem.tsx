@@ -1,24 +1,27 @@
-import { relativeTimeTag, truncate } from 'src/lib/formatters'
+import { useState } from 'react'
+
+import { motion } from 'framer-motion'
+import { Link as LinkIcon, MoreVert } from 'iconoir-react'
 import {
   DeleteItemMutationVariables,
   FindItemsMaybe,
   Item,
 } from 'types/graphql'
-import { Link as LinkIcon, MoreVert } from 'iconoir-react'
+
 import { Link, routes } from '@redwoodjs/router'
-import Checkbox from 'src/components/Form/Checkbox'
-import { motion } from 'framer-motion'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/dist/toast'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'src/components/Dropdown/Dropdown'
-import { useState } from 'react'
-import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/dist/toast'
-import { QUERY as ItemsMaybeQuery } from 'src/components/Item/ItemsCell/ItemsMaybeCell'
+import Checkbox from 'src/components/Form/Checkbox'
 import { QUERY as ItemsKeepQuery } from 'src/components/Item/ItemsCell/ItemsKeepCell'
+import { QUERY as ItemsMaybeQuery } from 'src/components/Item/ItemsCell/ItemsMaybeCell'
+import { relativeTimeTag, truncate } from 'src/lib/formatters'
 
 const DELETE_ITEM_MUTATION = gql`
   mutation DeleteItemMutation($id: Int!) {
@@ -126,7 +129,7 @@ function TodoItem({ item, noTruncate }: Props) {
     onError: (error) => {
       toast.error(error.message)
     },
-    optimisticResponse: ({ id, input }) => ({ id, ...input }) as Item,
+    optimisticResponse: ({ id, input }) => ({ id, ...input } as Item),
   })
 
   const onCheck = (checked: boolean) => {

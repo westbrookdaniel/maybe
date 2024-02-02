@@ -1,4 +1,5 @@
 import type { FindItemsMaybe } from 'types/graphql'
+
 import { ListItem } from './ListItem'
 
 const ItemsList = ({ itemsMaybe }: FindItemsMaybe) => {

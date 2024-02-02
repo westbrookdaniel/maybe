@@ -1,11 +1,11 @@
+import { motion } from 'framer-motion'
 import type { FindItemById } from 'types/graphql'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { ListItem } from 'src/components/Item/Items/ListItem'
-import { friendlyCategory } from 'src/lib/validate'
-import { motion } from 'framer-motion'
 import { relativeTimeTag, timeTag } from 'src/lib/formatters'
+import { friendlyCategory } from 'src/lib/validate'
 
 const itemVariants = {
   visible: (i: number) => ({
