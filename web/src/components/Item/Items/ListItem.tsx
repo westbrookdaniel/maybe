@@ -79,7 +79,7 @@ function LinkItem({ item, noTruncate }: Props) {
               </p>
             )}
           </div>
-          <LinkIcon width={24} />
+          <LinkIcon className="ml-2 min-w-[24px]" width={24} />
         </div>
       </Container>
     </motion.a>
