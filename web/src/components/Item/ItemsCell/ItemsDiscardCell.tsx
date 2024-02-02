@@ -19,6 +19,8 @@ export const QUERY = gql`
       link
       userId
       returnDate
+      category
+      returnTo
     }
   }
 `

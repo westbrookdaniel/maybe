@@ -1,5 +1,9 @@
 import { relativeTimeTag, truncate } from 'src/lib/formatters'
-import { DeleteItemMutationVariables, FindItemsMaybe } from 'types/graphql'
+import {
+  DeleteItemMutationVariables,
+  FindItemsMaybe,
+  Item,
+} from 'types/graphql'
 import { Link as LinkIcon, MoreVert } from 'iconoir-react'
 import { Link, routes } from '@redwoodjs/router'
 import Checkbox from 'src/components/Form/Checkbox'
@@ -98,12 +102,57 @@ function NoteItem({ item, noTruncate }: Props) {
   )
 }
 
+const UPDATE_ITEM_MUTATION = gql`
+  mutation UpdateItemMutation($id: Int!, $input: UpdateItemInput!) {
+    updateItem(id: $id, input: $input) {
+      id
+      title
+      description
+      type
+      dueDate
+      completed
+      link
+      userId
+      category
+      returnDate
+      returnTo
+    }
+  }
+`
+
 function TodoItem({ item, noTruncate }: Props) {
-  // TODO actually have completed checking working
-  const [c, onC] = React.useState(item.completed)
+  const [updateItem, { data }] = useMutation(UPDATE_ITEM_MUTATION, {
+    onError: (error) => {
+      toast.error(error.message)
+    },
+    optimisticResponse: ({ id, input }) => ({ id, ...input }) as Item,
+  })
+
+  const onCheck = (checked: boolean) => {
+    updateItem({
+      variables: {
+        id: item.id,
+        input: {
+          title: item.title,
+          description: item.description,
+          type: item.type,
+          dueDate: item.dueDate,
+          completed: checked,
+          link: item.link,
+          userId: item.userId,
+          category: item.category,
+          returnDate: item.returnDate,
+          returnTo: item.returnTo,
+        },
+      },
+    })
+  }
+
+  const checked = data?.completed ?? item.completed
+
   return (
     <motion.div className="px-6 py-2">
-      <Checkbox checked={c} onChange={onC}>
+      <Checkbox checked={checked} onChange={onCheck}>
         <Checkbox.Indicator />
         <Checkbox.Label>
           <div className="flex flex-col space-y-2">
@@ -117,7 +166,8 @@ function TodoItem({ item, noTruncate }: Props) {
               <p
                 className={
                   'text-gray-400' +
-                  (new Date(item.dueDate).getTime() < new Date().getTime() && !c
+                  (new Date(item.dueDate).getTime() < new Date().getTime() &&
+                  !checked
                     ? ' text-red-500'
                     : '')
                 }
